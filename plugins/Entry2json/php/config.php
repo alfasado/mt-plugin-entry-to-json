@@ -14,7 +14,7 @@ class Entry2json extends MTPlugin {
         'key'  => 'entry2json',
         'author_name' => 'Alfasado Inc.',
         'author_link' => 'http://alfasado.net/',
-        'version' => '0.2',
+        'version' => '0.3',
         'callbacks' => array(
             'pre_build_page' => 'pre_build_page'
         ),
@@ -41,6 +41,7 @@ class Entry2json extends MTPlugin {
             $json = NULL;
             $blog = $ctx->stash( 'blog' );
             $objects = array();
+            $objects[ 'blog' ] = $blog;
             $objects[ 'fileinfo' ] = $fileinfo;
             if ( ( $archive_type == 'index' ) || ( $archive_type == 'Category' ) ||
                  ( $archive_type == 'Monthly' ) || ( $archive_type == 'Yearly' ) ) {
@@ -106,6 +107,8 @@ class Entry2json extends MTPlugin {
                 $json[ $column_name ] = $field_val;
             }
         }
+        $permalink = $app->get_permalink( $entry );
+        $json[ 'permalink' ] = $permalink;
         if ( $get_categories ) {
             $categories = array();
             foreach ( $get_categories as $category ) {
@@ -121,7 +124,7 @@ class Entry2json extends MTPlugin {
                 array_push( $tags, $tag );
             }
             $json[ 'tags' ] = $tags;
-        }
+        }        
         if (! $wantarray ) {
             $json = json_encode( $json );
         }
